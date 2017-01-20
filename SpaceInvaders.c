@@ -158,26 +158,26 @@ void Init_Game(void){ char i =0, j =0, enemyType =0;
 			Nokia5110_PrintBMP(Enemy[i][j].x, Enemy[i][j].y, Enemy[i][j].image[0], 0);
 		}
 	}
-		MotherShip.y = ENEMYBONUSH; 
-		MotherShip.x =0; 
-		MotherShip.life = 1; 
-		MotherShip.image[0] = SmallEnemyBonus0;
-		MotherShip.image[1] = SmallEnemyBonus0; 
-		MotherShip.points = 50;
-		Player1.x = 0;
+	MotherShip.y = ENEMYBONUSH; 
+	MotherShip.x =0; 
+	MotherShip.life = 1; 
+	MotherShip.image[0] = SmallEnemyBonus0;
+	MotherShip.image[1] = SmallEnemyBonus0; 
+	MotherShip.points = 50;
+	Player1.x = 0;
     Player1.y = SCREENH-1;
     Player1.image = PlayerShip0;
     Player1.lives = 3;
-		Bunker.x = SCREENW/2 - BUNKERW/2;
-		Bunker.y	=SCREENH-PLAYERH-1; 
-		Bunker.life =3;
-		Bunker.image[3] = Bunker0;
-		Bunker.image[2] = Bunker1;
-		Bunker.image[1] = Bunker2;
-		Bunker.image[0] = Bunker3;
-		Nokia5110_PrintBMP(Bunker.x, Bunker.y, Bunker.image[Bunker.life], 0);
-		Nokia5110_PrintBMP(Player1.x, Player1.y, Player1.image, 0);
-		Nokia5110_DisplayBuffer();
+	Bunker.x = SCREENW/2 - BUNKERW/2;
+	Bunker.y	=SCREENH-PLAYERH-1; 
+	Bunker.life =3;
+	Bunker.image[3] = Bunker0;
+	Bunker.image[2] = Bunker1;
+	Bunker.image[1] = Bunker2;
+	Bunker.image[0] = Bunker3;
+	Nokia5110_PrintBMP(Bunker.x, Bunker.y, Bunker.image[Bunker.life], 0);
+	Nokia5110_PrintBMP(Player1.x, Player1.y, Player1.image, 0);
+	Nokia5110_DisplayBuffer();
 	 //Delay100ms(10000);
 }
 
