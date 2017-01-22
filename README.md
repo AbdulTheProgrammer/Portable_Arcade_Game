@@ -8,7 +8,7 @@ the project was to make a Space Invaders Game using the MSP430 microcontroller. 
 to go far beyond these basic guidelines by increasing the complexity of the game and developing hardware around
 it.
 
-How it works: 
+### How it works: 
 The main program uses a SPI display driver to render BMP images corresponding to game object to the Nokia LCD monitor. The main game loop is primarily responsible to detecting object collisions and rerendering the display. An interrupt fires 30 times per second and updates various game state values and sets a control flag indicating that a state change has occurred, which is used to communicate with the main task. This flag is then reset once the LCD monitor has been rerendered. 
 
 Various sounds are also output to the ADC whenever the corresponding event occurs within the game (i.e. player shoots a missle, enemy shoots a laser etc). These sound clips come from an array of DAC output values which are used by the 4 bit DAC to produce a rough sinusoidal signal; different sound clips produce different frequency waves. Output to the DAC is controlled by a finite state machine, which has three states: not playing, level ended and playing. When a sound clip needs to be played the corresponding function pointer is loaded onto a circular queue(the sound buffer). A high priority interrupt, which executes its ISR at a rate of 11.025 kHz, acts as the main FSM controller. This FSM controller works as follows: 
