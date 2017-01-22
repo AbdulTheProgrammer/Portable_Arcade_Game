@@ -27,3 +27,7 @@ Embedded C
 SPI, UART, I2C, MSP430, Custom-built PCB, various electrical components sourced from DigiKey
 ### Tools: 
 EagleCAD, ViewMate, soldering iron, hand drill, digital multimeter
+
+![Portable_Arcade_Game](/Images/16237697_10206562338056006_1635670807_n.jpg)
+
+![Portable_Arcade_Game](/Images/16237222_10206562333535893_766669284_n.jpg)
