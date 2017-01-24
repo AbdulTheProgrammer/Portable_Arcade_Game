@@ -1,3 +1,4 @@
+#include "Game_Images.h"
 // *************************** Images ***************************
 // enemy ship that starts at the top of the screen (arms/mouth closed)
 // width=16 x height=10

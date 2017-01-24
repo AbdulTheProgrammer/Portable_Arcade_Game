@@ -25,7 +25,7 @@
 #include "ADC.h" 
 #include "Sound.h"
 #include "SpaceInvaders.h"
-#include "Game_Images.c"
+#include "Game_Images.h"
 #include <assert.h>
 
 #define BUNKERW     ((unsigned char)Bunker0[18])
