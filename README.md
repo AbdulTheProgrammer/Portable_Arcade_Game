@@ -20,7 +20,7 @@ Various sounds are also output to the ADC whenever the corresponding event occur
 - Whenever a level ends, the FSM controller transitions to the level end state, which immediately stops outputting to the DAC and resets the sound buffer to reset the game.    
 
 A circular queue is used for this application as it has O(1) enqueue and dequeue operations and is relatively easy to implement in an embedded system. This constant time complexity is important as code written in an ISR must always be short and bounded. 
-The sound.c file contains the implementation details for this FSM. 
+The Sound.c file contains the implementation details for this FSM. 
 
 ### Software: 
 Embedded C
