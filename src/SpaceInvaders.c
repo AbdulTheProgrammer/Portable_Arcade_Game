@@ -140,21 +140,24 @@ void Init_Game(void){ char i =0, j =0, enemyType =0;
 			Enemy[i][j].x = ENEMY10W*j;
 			Enemy[i][j].y = ENEMY10H*(i+2);
 			Enemy[i][j].life = 1;
+			//obtain random number of enemy types
 			enemyType = ((Random32()>>24)%4)+1;
-			if(enemyType==1) { 
-				Enemy[i][j].image[0] = SmallEnemy10PointA;
-				Enemy[i][j].image[1] = SmallEnemy10PointB;
-				Enemy[i][j].points = 10;
-			}
-			else if (enemyType ==2) {
-				Enemy[i][j].image[0] = SmallEnemy20PointA;
-				Enemy[i][j].image[1] = SmallEnemy20PointB;
-				Enemy[i][j].points = 20;
-			}
-			else {
-				Enemy[i][j].image[0] = SmallEnemy30PointA;
-				Enemy[i][j].image[1] = SmallEnemy30PointB;
-				Enemy[i][j].points = 30;
+			case enemyType {
+				case 1: 
+					Enemy[i][j].image[0] = SmallEnemy10PointA;
+					Enemy[i][j].image[1] = SmallEnemy10PointB;
+					Enemy[i][j].points = 10;
+					break;
+				case 2: 
+					Enemy[i][j].image[0] = SmallEnemy20PointA;
+					Enemy[i][j].image[1] = SmallEnemy20PointB;
+					Enemy[i][j].points = 20;
+					break; 
+				default: 
+					Enemy[i][j].image[0] = SmallEnemy30PointA;
+					Enemy[i][j].image[1] = SmallEnemy30PointB;
+					Enemy[i][j].points = 30;
+					break;
 			}
 			Nokia5110_PrintBMP(Enemy[i][j].x, Enemy[i][j].y, Enemy[i][j].image[0], 0);
 		}
@@ -166,9 +169,9 @@ void Init_Game(void){ char i =0, j =0, enemyType =0;
 		MotherShip.image[1] = SmallEnemyBonus0; 
 		MotherShip.points = 50;
 		Player1.x = 0;
-    Player1.y = SCREENH-1;
-    Player1.image = PlayerShip0;
-    Player1.lives = 3;
+    	Player1.y = SCREENH-1;
+    	Player1.image = PlayerShip0;
+    	Player1.lives = 3;
 		Bunker.x = SCREENW/2 - BUNKERW/2;
 		Bunker.y	=SCREENH-PLAYERH-1; 
 		Bunker.life =3;
@@ -220,6 +223,7 @@ void MissileLaunch() {
 		MissileBuffer[misl_index].lifetime = 1500;
 	}
 }
+
 //updates new enemy position and signals for new sounds to be played
 void EnemyMove(void){ unsigned char i,j;
   unsigned char leftMost = 3;
@@ -266,9 +270,12 @@ void EnemyMove(void){ unsigned char i,j;
 			Play_Fastinvader2();
 		}
 }
+
 //function responsible to redrawing all the game objects and checking for collisions between enemy/players and projectiles, called from main game loop
 void Draw(void){ unsigned char i,j,k;
 	Nokia5110_ClearBuffer();
+	
+	//looping through game object buffers to determine which laser objects and enemies were killed 
 	for(i=0;i<32;i++) {
 		if(LaserBuffer[i].lifetime) { 
 			if(LaserBuffer[i].x >= Bunker.x && LaserBuffer[i].x+LASERW <= Bunker.x+BUNKERW && LaserBuffer[i].y-LASERH <= Bunker.y && Bunker.life) { 
@@ -322,7 +329,7 @@ void Draw(void){ unsigned char i,j,k;
 				}
 			}
 		}
-		
+		//check if the player was hit with a missile that is alive 
 		if(MissileBuffer[i].lifetime) { 
 			if(MissileBuffer[i].x >= Player1.x && MissileBuffer[i].x+MISSILEW <= Player1.x+PLAYERW && MissileBuffer[i].y >= Player1.y-PLAYERH) { 
 				MissileBuffer[i].lifetime =0; 
@@ -344,6 +351,7 @@ void Draw(void){ unsigned char i,j,k;
 			if(MissileBuffer[i].y >= SCREENH-1) {
 				MissileBuffer[i].lifetime =0;
 			}
+			//special condition to check if laser and missile positions collided, replace with explosion image
 			for(k=0;k<32;k++) {
 				if(MissileBuffer[i].lifetime && LaserBuffer[k].lifetime && MissileBuffer[i].x >= LaserBuffer[k].x && LaserBuffer[k].x+LASERW <= MissileBuffer[i].x+MISSILEW && LaserBuffer[k].y-LASERH <= MissileBuffer[i].y) { 
 						MissileBuffer[i].lifetime=0;
@@ -436,13 +444,13 @@ void Draw(void){ unsigned char i,j,k;
 	Nokia5110_SetCursor(1, 1);
 
 }
-
+//function that starts one level of the game, returns whether the level ended due to the player losing or killing all enemies 
 unsigned char Start_Game() { 
-while(Player1.lives && EnemyCount){
+	while(Player1.lives && EnemyCount){
 		while(!Control_Flag){}			
 		Draw();
 		Control_Flag = 0;
-  }
+  	}
 	if(EnemyCount) { 
 		return 0;
 	}
@@ -451,6 +459,7 @@ while(Player1.lives && EnemyCount){
 	}
 }
 
+//function to end the game and reset score
 void Game_Over() { 
 		Stop_Sound();
 		DisableInterrupts(); 
@@ -499,8 +508,7 @@ int main(void){
 			Play_Highpitch();
 		}
 		Stop_Sound();
-		Random_Init(NVIC_ST_CURRENT_R);
-		Systick_Init();
+		Systick_Init(); //init main interrupt timer
 		Init_Game();
 		alive = Start_Game(); 
 		// level 1 complete
@@ -577,20 +585,20 @@ int main(void){
 					}
 			}
 			else { 
-					setPE3State(0x00); 
-					setPE4State(0x00);
+				setPE3State(0x00); 
+				setPE4State(0x00);
 				Game_Over();
 			}
 		}
 		else {
-					setPE3State(0x00); 
-					setPE4State(0x00);		
+			setPE3State(0x00); 
+			setPE4State(0x00);		
 			Game_Over();
 		}
 	}
 
 }
-//ISR used to update the various state changes within the game with counters
+//ISR used to update the various state changes within the game with counters for timing
 void SysTick_Handler(void){
 	EnemyFireCounter = (EnemyFireCounter+1)%EnemyFireCounterMask;
 	EnemyMoveCounter = (EnemyMoveCounter+1)%EnemyMoveCounterMask; 
@@ -598,17 +606,21 @@ void SysTick_Handler(void){
 	if(!EnemyMoveCounter) {
 		EnemyMove();
 	}
+	//controls spawn rate if special bonus mother ship
 	periodicEnemyRate--;
 	if(!periodicEnemyRate) { 
 		MotherShipLaunch();
 		periodicEnemyRate = RESPAWNRATE;
 	}	
+	//controls the frequency of missile launches from enemies
 	if(!EnemyFireCounter) { 
 		MissileLaunch();
 	}
+	//detects button press for laser launch
 	if(prev_btn_state && !Read_Switch1() && !LaserCounter) { 
 		LaserLaunch(Player1.x+(PLAYERW/2)); 
 	}
+	//counter to prevent user from spamming lasers
 	if(LaserCounter) { 
 		LaserCounter--;
 	}
